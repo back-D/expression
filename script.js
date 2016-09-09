@@ -29,43 +29,41 @@ function Expression() {
         argumentLength = arguments.length,
         operandArray = [],
         operandArray2 = [],
-        myArguments = arguments;
+        myArguments = arguments,
+        isSimpleExpression = true;
 
     function clear () {
+        operator = '';
         operandArray2 = [];
         leftSideOperand = '';
         rightSideOperand = '';
         argumentLength = 0;
         operandArray = 0;
+        isSimpleExpression = true;
     }
 
-    this.setOperator = function (oper) {
-        operator = oper;
+    this.setOperator = function (value) {
+        operator = value;
     };
-    this.setLeftSideOperand = function (leftOperand) {
-        leftSideOperand = leftOperand;
+    this.setLeftSideOperand = function (value) {
+        leftSideOperand = value;
     };
-    this.setRightSideOperand = function (rightOperand) {
-        rightSideOperand = rightOperand;
+    this.setRightSideOperand = function (value) {
+        rightSideOperand = value;
     };
 
 
     this.setOperands = function () {
-        operandArray = Array.prototype.slice.apply(arguments);
-
-        if (operandArray[0] instanceof Array) {
-            operandArray2 = operandArray.shift();
-        } else {
-            operandArray2 = operandArray;
-        }
-
+        var isArray = Array.isArray(arguments[0]);
+        operandArray = isArray ? arguments[0] : Array.prototype.slice.apply(arguments);
+        isSimpleExpression = false;
     };
 
     this.execute = function () {
 
         if (leftSideOperand != '' && rightSideOperand != '') {
-            operandArray.push(leftSideOperand, rightSideOperand);
-            return eval(operandArray.join(operator));
+
+            return eval([leftSideOperand, rightSideOperand].join(operator));
 
         } else if (argumentLength >= 3) {
             operator = myArguments[0];
@@ -74,22 +72,15 @@ function Expression() {
             }
             return eval(operandArray.join(operator));
 
-        } else if (operandArray2.length != 0) {
-            return eval(operandArray2.join(operator));
+        } else if (!isSimpleExpression) {
+            return eval(operandArray.join(operator));
         } else {
             console.log('Убери руки, дурачёк!');
         }
         clear();
     };
 
-    this.clear = function () {
-        operator = '';
-        leftSideOperand = '';
-        rightSideOperand = '';
-        operandArray = [];
-        operandArray2 = [];
-        argumentLength = 0;
-    };
+    this.clear = clear;
 
     return this;
 }
