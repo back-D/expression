@@ -43,6 +43,7 @@ function Expression() {
 
     this.setOperands = function () {
         var isArray = [];
+        operandArray = [];
         for (var i = 0; i < arguments.length; i++) {
             operandArray[i] = arguments[i];
             isArray[i] = arguments[i];
@@ -51,7 +52,6 @@ function Expression() {
         if (typeof (isArray.shift()) == "object") {
             operandArray2 = operandArray.shift();
         } else operandArray2 = operandArray;
-
 
     };
 
